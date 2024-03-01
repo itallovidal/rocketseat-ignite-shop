@@ -1,6 +1,6 @@
 import {styled} from "@/styles";
 
-const Header = styled('header', {
+export const Header = styled('header', {
     maxWidth: '76rem',
     width: '100%',
 
@@ -8,3 +8,4 @@ const Header = styled('header', {
     paddingBottom: '2rem',
     margin: '0 auto'
 })
+

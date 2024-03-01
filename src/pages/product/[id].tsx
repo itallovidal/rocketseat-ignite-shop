@@ -1,24 +1,50 @@
-import React from 'react';
+import React, {useState} from 'react';
 import * as Styles from '../../styles/pages/productStyle'
 import Image from 'next/image'
-import placeholder from '../../assets/placeholder.png'
+import {GetStaticPaths, GetStaticProps} from "next";
+import {stripe} from "../../../lib/stripe";
+import Stripe from "stripe";
+import axios from "axios";
+import {IProduct} from "@/pages";
 
-function Product() {
+interface ProductProps{
+    product: IProduct
+}
+
+function Product({product} : ProductProps) {
+    const [isLoading, setIsLoading] = useState(false)
+    async function handleBuyProduct(){
+        try {
+            setIsLoading(true)
+            const response = await axios.post('/api/checkout', {
+                priceID: product.defaultPriceID
+            }, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+
+            const { checkoutURL } = response.data
+            window.location.href = checkoutURL
+        }catch (e) {
+            setIsLoading(false)
+            console.log(e)
+        }
+    }
+
     return(
         <Styles.Main>
             <Styles.PictureBox>
-                <Image fill alt={''} src={placeholder}/>
+                <Image fill alt={''} src={product.imageUrl}/>
             </Styles.PictureBox>
 
             <Styles.ProductInfo>
-                <h1>Nome da camiseta</h1>
-                <h2>92,00</h2>
+                <h1>{product.name}</h1>
+                <h2>{product.price}</h2>
 
-                <p>Tempus fermentum eget lacus, quis ante. Potenti sit pharetra, ridiculus amet. Bibendum pretium arcu arcu eget viverra at metus donec hendrerit. Rhoncus, nunc, eu at ac.
+                <p>{product.description}</p>
 
-                    At massa, fermentum amet ornare cras tincidunt nunc tincidunt. Netus lorem nulla nulla mattis integer velit dictum proin nibh.</p>
-
-                <button>Comprar agora</button>
+                <button disabled={isLoading} onClick={()=> handleBuyProduct()}>Comprar agora</button>
 
             </Styles.ProductInfo>
         </Styles.Main>
@@ -26,3 +52,36 @@ function Product() {
 }
 
 export default Product
+
+export const getStaticProps: GetStaticProps = async ({params})=>{
+    const productID = params!.id as string
+
+    const product = await stripe.products.retrieve(productID, {
+        expand: ['default_price']
+    })
+    const price = product.default_price as Stripe.Price
+
+    return{
+        props:{
+            product:{
+                id: product.id,
+                name: product.name,
+                imageUrl: product.images[0],
+                price: new Intl.NumberFormat('pt-BR',{
+                    style: 'currency',
+                    currency: 'BRL'
+                }).format(price.unit_amount! / 100),
+                description: product.description
+            }
+        },
+        revalidate: 60 * 60
+    }
+}
+
+export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
+
+    return {
+        paths: [], //indicates that no page needs be created at build time
+        fallback: 'blocking' //indicates the type of fallback
+    }
+}
