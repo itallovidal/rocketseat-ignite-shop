@@ -9,19 +9,17 @@ export const config = {
 }
 
 export default async function handler(req: NextApiRequest , res: NextApiResponse){
-    const body = req.body
-    console.log('->')
-    console.log(body)
-
-
-    const priceID = null
 
     if(req.method !== 'POST'){
         return res.status(405).end()
     }
+    const { priceID } = req.body
+
     if(!priceID){
         return res.status(400).end()
     }
+
+
 
     const successUrl = `${process.env.NEXT_URL}/success?session_id={CHECKOUT_SESSION_ID}`
     const cancelUrl = `${process.env.NEXT_URL}/`

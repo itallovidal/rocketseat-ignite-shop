@@ -15,31 +15,23 @@ interface ProductProps{
 function Product({product} : ProductProps) {
     const [isLoading, setIsLoading] = useState(false)
     async function handleBuyProduct(){
+
+        console.log(product)
         try {
             setIsLoading(true)
-            // const response = await axios.post('/api/checkout', {
-            //     priceID: product.defaultPriceID
-            // }, {
-            //     headers: {
-            //         "Content-Type": "application/json"
-            //     }
-            // })
-
-            console.log('a')
-            const response = await fetch('http://localhost:3000/api/checkout', {
+            const response = await axios.post('/api/checkout', {
+                priceID: product.defaultPriceID
+            }, {
                 headers: {
                     "Content-Type": "application/json"
-                },
-                method: 'POST',
-                body: JSON.stringify({
-                    priceID: product.defaultPriceID
-                })
+                }
             })
-            console.log('b')
-            console.log(response)
 
-            // const { checkoutURL } = response.data
-            // window.location.href = checkoutURL
+
+
+
+            const { checkoutURL } = response.data
+            window.location.href = checkoutURL
         }catch (e) {
             setIsLoading(false)
             console.log(e)
@@ -49,7 +41,7 @@ function Product({product} : ProductProps) {
     return(
         <Styles.Main>
             <Head>
-                <title> {product.name} | Ignite</title>
+                <title> Camisetas | Ignite</title>
             </Head>
             <Styles.PictureBox>
                 <Image fill alt={''} src={product.imageUrl}/>
@@ -88,7 +80,8 @@ export const getStaticProps: GetStaticProps = async ({params})=>{
                     style: 'currency',
                     currency: 'BRL'
                 }).format(price.unit_amount! / 100),
-                description: product.description
+                description: product.description,
+                defaultPriceID: price.id
             }
         },
         revalidate: 60 * 60
