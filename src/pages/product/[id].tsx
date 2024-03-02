@@ -6,6 +6,7 @@ import {stripe} from "../../../lib/stripe";
 import Stripe from "stripe";
 import axios from "axios";
 import {IProduct} from "@/pages";
+import Head from "next/head";
 
 interface ProductProps{
     product: IProduct
@@ -16,16 +17,29 @@ function Product({product} : ProductProps) {
     async function handleBuyProduct(){
         try {
             setIsLoading(true)
-            const response = await axios.post('/api/checkout', {
-                priceID: product.defaultPriceID
-            }, {
+            // const response = await axios.post('/api/checkout', {
+            //     priceID: product.defaultPriceID
+            // }, {
+            //     headers: {
+            //         "Content-Type": "application/json"
+            //     }
+            // })
+
+            console.log('a')
+            const response = await fetch('http://localhost:3000/api/checkout', {
                 headers: {
                     "Content-Type": "application/json"
-                }
+                },
+                method: 'POST',
+                body: JSON.stringify({
+                    priceID: product.defaultPriceID
+                })
             })
+            console.log('b')
+            console.log(response)
 
-            const { checkoutURL } = response.data
-            window.location.href = checkoutURL
+            // const { checkoutURL } = response.data
+            // window.location.href = checkoutURL
         }catch (e) {
             setIsLoading(false)
             console.log(e)
@@ -34,6 +48,9 @@ function Product({product} : ProductProps) {
 
     return(
         <Styles.Main>
+            <Head>
+                <title> {product.name} | Ignite</title>
+            </Head>
             <Styles.PictureBox>
                 <Image fill alt={''} src={product.imageUrl}/>
             </Styles.PictureBox>

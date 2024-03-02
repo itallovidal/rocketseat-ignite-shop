@@ -8,6 +8,7 @@ import {GetStaticProps} from "next";
 import {stripe} from '../../lib/stripe'
 import Stripe from "stripe";
 import Link from "next/link";
+import Head from "next/head";
 
 export interface IProduct{
     id: string,
@@ -39,8 +40,12 @@ function Home({products} : Props) {
         }
     }
 
+
     return (
         <Styles.Main >
+            <Head>
+                <title>Home | Ignite</title>
+            </Head>
             <Styles.CarrouselArrow onClick={()=> handleScroll("left")} justify={'start'}>
                 <CaretLeft size={32} weight="fill" />
             </Styles.CarrouselArrow>

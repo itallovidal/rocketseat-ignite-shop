@@ -1,16 +1,20 @@
-import {stripe} from "../../../lib/stripe";
+import {stripe} from "../../../../lib/stripe";
 import {NextApiRequest, NextApiResponse} from "next";
+import {NextRequest} from "next/server";
 
 export const config = {
     api: {
-        bodyParser: false,
+        bodyParser: true
     },
-};
+}
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse){
-    const { priceID } = req.body
-    console.log(req.body)
-    console.log('a')
+export default async function handler(req: NextApiRequest , res: NextApiResponse){
+    const body = req.body
+    console.log('->')
+    console.log(body)
+
+
+    const priceID = null
 
     if(req.method !== 'POST'){
         return res.status(405).end()
@@ -19,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).end()
     }
 
-    const successUrl = `${process.env.NEXT_URL}/success`
+    const successUrl = `${process.env.NEXT_URL}/success?session_id={CHECKOUT_SESSION_ID}`
     const cancelUrl = `${process.env.NEXT_URL}/`
 
     const checkoutSession = await stripe.checkout.sessions.create({
