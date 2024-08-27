@@ -16,4 +16,8 @@ export const { styled, getCssText, globalCss } = createStitches({
       purple: '#7465D4',
     } as const,
   },
+
+  media: {
+    mobile: '(max-width: 1250px)',
+  },
 })

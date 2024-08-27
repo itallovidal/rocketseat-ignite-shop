@@ -85,7 +85,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         defaultPriceID: price.id,
       },
     },
-      revalidate: 60 * 60,
+    revalidate: 60 * 60,
   }
 }
 

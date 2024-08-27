@@ -1,4 +1,4 @@
-import { globalCss } from '.'
+import { globalCss, styled } from '.'
 import { keyframes } from '@stitches/react'
 
 const show = keyframes({
@@ -46,6 +46,32 @@ export const globalStyles = globalCss({
     img: {
       maxWidth: '100%',
       maxHeight: '100%',
+    },
+  },
+})
+
+export const ApplicationContainer = styled('div', {
+  '@mobile': {
+    '& :not(.warning)': {
+      display: 'none',
+    },
+
+    '.warning': {
+      backgroundColor: 'black',
+      color: 'white',
+      height: '100vh',
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: '1rem',
+      flexDirection: 'column',
+      gap: '2rem',
+
+      p: {
+        textAlign: 'center',
+        display: 'initial',
+      },
     },
   },
 })

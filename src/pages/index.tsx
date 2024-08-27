@@ -1,6 +1,5 @@
 import * as Styles from '../styles/pages/homeStyle'
 import Image from 'next/image'
-
 import { CaretLeft, CaretRight } from 'phosphor-react'
 import React from 'react'
 import { GetStaticProps } from 'next'
