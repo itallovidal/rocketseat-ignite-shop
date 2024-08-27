@@ -18,6 +18,7 @@ export const { styled, getCssText, globalCss } = createStitches({
   },
 
   media: {
-    mobile: '(max-width: 1250px)',
+    minimumWidth: '(max-width: 1250px)',
+    app: '(min-width: 1250px)',
   },
 })

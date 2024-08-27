@@ -51,7 +51,7 @@ export const globalStyles = globalCss({
 })
 
 export const ApplicationContainer = styled('div', {
-  '@mobile': {
+  '@minimumWidth': {
     '& :not(.warning)': {
       display: 'none',
     },
@@ -72,6 +72,12 @@ export const ApplicationContainer = styled('div', {
         textAlign: 'center',
         display: 'initial',
       },
+    },
+  },
+
+  '@app': {
+    '.warning': {
+      display: 'none',
     },
   },
 })
